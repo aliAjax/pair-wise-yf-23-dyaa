@@ -53,6 +53,16 @@ frontend/src/api, stores, types, constants, constructors, components/common, hoo
 - FixtureType: constants/FixtureType、types/FixtureType、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - CueStatus: constants/CueStatus、types/CueStatus、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - ChannelMode: constants/ChannelMode、types/ChannelMode、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
+- RiggingStatus: constants/RiggingStatus、constants/statusText、types/Rigging、constructors/RiggingConstructor、api/Rigging、stores/RiggingStore、灯具布置（吊挂复核台）页面均有引用。
+
+## 吊挂复核台（灯具布置 `/fixtures`）
+
+录入灯具编号、类型、吊杆、横向位置（厘米）、重量（公斤）、功率（瓦）后提交复核：
+
+- 同一吊杆上相邻灯具中心间距不足 **80 厘米**（`constants/RiggingRules.MIN_SPACING_CM`）判为碰肩冲突，并指出冲突的两盏灯编号。
+- 同一吊杆总重超过 **650 公斤**（`constants/RiggingRules.MAX_BAR_WEIGHT_KG`）判为超重。
+- 存在任一冲突时本次摆放只写入草稿键 `stage-light:rigging-draft`，已入库灯位（`stage-light:rigging-layout`）与场景引用照旧；复核通过后整杆布局才正式写入浏览器，清除草稿，切换页面回来仍能看到最后一次摆放。
+- 校验逻辑在 `utils/riggingCheck.ts`，本地读写在 `api/Rigging.ts`，状态在 `stores/RiggingStore.ts`，相关组件为 `components/common/RiggingFormTable`、`BoomBarStrip`、`RiggingConflictPanel`。
 
 ## 为什么会牵一发动全身
 

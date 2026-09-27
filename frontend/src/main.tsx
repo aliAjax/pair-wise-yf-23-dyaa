@@ -1,54 +1,54 @@
-import React, { useMemo, useState } from "react";
+import { useState } from "react";
 import { createRoot } from "react-dom/client";
 import { routes } from "./router/routes";
-import { mockData } from "./mocks/seedData";
-import { StatusBadge } from "./components/common/StatusBadge";
-import { StatCard } from "./components/common/StatCard";
+import { FixturesPage } from "./pages/FixturesPage";
+import { CuesPage } from "./pages/CuesPage";
+import { TimelinePage } from "./pages/TimelinePage";
+import { PreviewPage } from "./pages/PreviewPage";
 import "./styles.css";
 
-function Page({ name }: { name: string }) {
-  const entities = Object.entries(mockData);
-  const total = useMemo(() => entities.reduce((sum, [, rows]) => sum + rows.length, 0), [entities]);
-  return <main className="page">
-    <section className="page-head">
-      <div>
-        <p className="eyebrow">stage-light</p>
-        <h1>{name}</h1>
-      </div>
-      <StatusBadge value="LOCAL_DATA" />
-    </section>
-    <section className="metrics">
-      <StatCard label="核心模型" value={entities.length} />
-      <StatCard label="本地记录" value={total} />
-      <StatCard label="共享枚举" value={3} />
-    </section>
-    <section className="workbench">
-      <div className="panel wide">
-        <h2>业务数据</h2>
-        <div className="table">
-          {entities.map(([key, rows]) => <article key={key} className="row">
-            <strong>{key}</strong><span>{rows.length} 条</span><StatusBadge value={Object.values(rows[0] ?? {})[1] as string ?? "READY"} />
-          </article>)}
+const pageByName: Record<string, () => JSX.Element> = {
+  灯具布置: FixturesPage,
+  场景编辑: CuesPage,
+  时间轴编排: TimelinePage,
+  舞台预览: PreviewPage
+};
+
+function Placeholder({ name }: { name: string }) {
+  return (
+    <section className="page">
+      <header className="page-head">
+        <div>
+          <p className="eyebrow">stage-light</p>
+          <h1>{name}</h1>
         </div>
-      </div>
+      </header>
       <div className="panel">
-        <h2>联动检查</h2>
-        <p>页面、store、API、构造器、日志模板和枚举常量均按提示词拆分，适合评审跨文件修改能力。</p>
+        <div className="empty">「{name}」页面建设中，灯具吊挂复核请前往「灯具布置」。</div>
       </div>
     </section>
-  </main>;
+  );
 }
 
 function App() {
-  const [active, setActive] = useState<string>(routes[0]?.route ?? "/dashboard");
+  const [active, setActive] = useState<string>(routes[0]?.route ?? "/fixtures");
   const current = routes.find((route) => route.route === active) ?? routes[0];
-  return <div className="shell">
-    <aside>
-      <div className="brand">舞台灯光编排模拟器</div>
-      <nav>{routes.map((route) => <button key={route.route} className={active === route.route ? "active" : ""} onClick={() => setActive(route.route)}>{route.name}</button>)}</nav>
-    </aside>
-    <Page name={current?.name ?? "工作台"} />
-  </div>;
+  const CurrentPage = pageByName[current.name] ?? (() => <Placeholder name={current.name} />);
+  return (
+    <div className="shell">
+      <aside>
+        <div className="brand">舞台灯光编排模拟器</div>
+        <nav>
+          {routes.map((route) => (
+            <button key={route.route} className={active === route.route ? "active" : ""} onClick={() => setActive(route.route)}>
+              {route.name}
+            </button>
+          ))}
+        </nav>
+      </aside>
+      <CurrentPage />
+    </div>
+  );
 }
 
 createRoot(document.getElementById("root")!).render(<App />);
