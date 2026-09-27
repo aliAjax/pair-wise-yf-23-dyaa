@@ -1,4 +1,56 @@
 export const mockData = {
+  "rigging": [
+    {
+      "id": 1,
+      "fixture_code": "FX-101",
+      "fixture_type": "SPOT",
+      "batten": "1号吊杆",
+      "position_cm": 120,
+      "weight_kg": 18,
+      "power_w": 750,
+      "status": "PLACED"
+    },
+    {
+      "id": 2,
+      "fixture_code": "FX-102",
+      "fixture_type": "WASH",
+      "batten": "1号吊杆",
+      "position_cm": 260,
+      "weight_kg": 22,
+      "power_w": 900,
+      "status": "PLACED"
+    },
+    {
+      "id": 3,
+      "fixture_code": "FX-103",
+      "fixture_type": "BEAM",
+      "batten": "1号吊杆",
+      "position_cm": 420,
+      "weight_kg": 25,
+      "power_w": 1200,
+      "status": "PLACED"
+    },
+    {
+      "id": 4,
+      "fixture_code": "FX-201",
+      "fixture_type": "PAR",
+      "batten": "2号吊杆",
+      "position_cm": 150,
+      "weight_kg": 12,
+      "power_w": 500,
+      "status": "PLACED"
+    },
+    {
+      "id": 5,
+      "fixture_code": "FX-202",
+      "fixture_type": "STROBE",
+      "batten": "2号吊杆",
+      "position_cm": 310,
+      "weight_kg": 9,
+      "power_w": 800,
+      "status": "PLACED"
+    }
+  ],
   "fixture": [
     {
       "id": 1,

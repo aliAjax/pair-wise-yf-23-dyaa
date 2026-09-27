@@ -1,6 +1,6 @@
 # 舞台灯光编排模拟器
 
-纯前端舞台灯光编排工具，支持灯具通道、场景 Cue、时间轴预览和演出方案导出，所有数据存在 IndexedDB。
+纯前端舞台灯光编排工具，支持灯具通道、场景 Cue、时间轴预览和演出方案导出，所有数据存在 IndexedDB。灯具布置页为吊挂复核台：录入编号、类型、吊杆、横向位置、重量和功率后复核吊挂安全，复核通过的整杆布局写入浏览器 localStorage。
 
 ## 快速启动
 
@@ -53,6 +53,14 @@ frontend/src/api, stores, types, constants, constructors, components/common, hoo
 - FixtureType: constants/FixtureType、types/FixtureType、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - CueStatus: constants/CueStatus、types/CueStatus、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - ChannelMode: constants/ChannelMode、types/ChannelMode、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
+- RiggingStatus: constants/RiggingStatus、types/RiggingStatus、constants/statusText、constructors/RiggingConstructor、stores/RiggingStore、pages/FixturesPage、components/common/RiggingBattenView 均有引用。
+
+## 吊挂复核台规则
+
+- 复核规则常量在 `frontend/src/constants/Rigging.ts`：同一吊杆灯中心间距不足 `MIN_SPACING_CM`（80cm），或总重超过 `MAX_LOAD_KG`（650kg）即判定冲突。
+- 冲突时本次摆放只留作草稿（`stage-light.rigging.drafts`），并在页面上指出冲突的两盏灯；已保存灯位与场景引用照旧不变。
+- 复核通过后整杆布局写入 `stage-light.rigging.layout`（localStorage），切换页面或刷新后仍看到最后的摆放。
+- 校验逻辑在 `utils/riggingCheck.ts`，错误文案模板在 `constants/errorMessages.ts`（`RIGGING_SPACING_CONFLICT` / `RIGGING_OVERLOAD`），由 `utils/formatters.ts` 的 `fillTemplate` 插值。
 
 ## 为什么会牵一发动全身
 
